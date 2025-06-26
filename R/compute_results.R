@@ -239,7 +239,7 @@ compute_results <- function(sol_bln, sol_cfl) {
     tot = tot,
     vot = vot,
     tech = tech,
-    approximate_welfare_decomposition = approximate_welfare_decomposition,
+    approx_welfare_decomposition = approx_welfare_decomposition,
     welfare = welfare,
     convergence_info = convergence_info
   )
