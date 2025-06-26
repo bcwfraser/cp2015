@@ -197,7 +197,8 @@ compute_results <- function(sol_bln, sol_cfl) {
     ) %>% 
     dplyr::select(region, realwage)
 
-  welfare <- dplyr::left_join(
+  # Note that the welfare decomposition from the CP paper is only a local approximation
+  approx_welfare_decomposition <- dplyr::left_join(
     x = tot_total,
     y = vot_total,
     by = "region"
@@ -207,8 +208,13 @@ compute_results <- function(sol_bln, sol_cfl) {
       by = "region"
     ) %>% 
     dplyr::mutate(
-      welfare = tot + vot + tech
-    ) %>% 
+      approx_welfare = tot + vot + tech
+    ) 
+
+  welfare <- dplyr::left_join(
+    x = I_n,
+    y = P_n_hat) %>%
+    dplyr::mutate(welfare = ((I_cfl/I_bln)/P_n_hat - 1) * 100) %>%
     dplyr::left_join(
       y = real_wage,
       by = "region"
@@ -233,6 +239,7 @@ compute_results <- function(sol_bln, sol_cfl) {
     tot = tot,
     vot = vot,
     tech = tech,
+    approximate_welfare_decomposition = approximate_welfare_decomposition,
     welfare = welfare,
     convergence_info = convergence_info
   )
